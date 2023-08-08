@@ -2,11 +2,12 @@ package com.frontleaves.chainmining.listeners;
 
 import com.frontleaves.chainmining.ChainMining;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -14,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import java.util.Objects;
 
 /**
  * @author 锋楪技术（深圳）有限公司
@@ -23,58 +24,508 @@ import java.util.Random;
 public class MineralsListener implements Listener {
 
     private static int blockNumber;
-    private static int expToGive;
     private static int damage;
     private static int maxDurability;
-
+    private static ItemStack playerMainHandTool;
+    private static int ExpToDrop;
+    // 获取本次破坏的方块
+    private Material thisBreak;
 
     @EventHandler
-    public void minerals(BlockBreakEvent breakEvent) {
-        if (ChainMining.playerList.get(breakEvent.getPlayer().getName()).get("chainMining")) {
-            if (breakEvent.getPlayer().isSneaking()) {
-                // 检测这个方块能否掉落
-                if (breakEvent.isDropItems()) {
-                    Block getBlock = breakEvent.getBlock();
-                    if (getBlock.getType() == Material.COAL_ORE || getBlock.getType() == Material.DEEPSLATE_COAL_ORE
-                            || getBlock.getType() == Material.LAPIS_ORE || getBlock.getType() == Material.DEEPSLATE_LAPIS_ORE
-                            || getBlock.getType() == Material.COPPER_ORE || getBlock.getType() == Material.DEEPSLATE_COPPER_ORE
-                            || getBlock.getType() == Material.IRON_ORE || getBlock.getType() == Material.DEEPSLATE_IRON_ORE
-                            || getBlock.getType() == Material.GOLD_ORE || getBlock.getType() == Material.DEEPSLATE_GOLD_ORE
-                            || getBlock.getType() == Material.DIAMOND_ORE || getBlock.getType() == Material.DEEPSLATE_DIAMOND_ORE
-                            || getBlock.getType() == Material.REDSTONE_ORE || getBlock.getType() == Material.DEEPSLATE_REDSTONE_ORE
-                            || getBlock.getType() == Material.EMERALD_ORE || getBlock.getType() == Material.DEEPSLATE_EMERALD_ORE
-                            || getBlock.getType() == Material.NETHER_GOLD_ORE
-                            || getBlock.getType() == Material.NETHER_QUARTZ_ORE
-                            || getBlock.getType() == Material.ANCIENT_DEBRIS) {
-                        if (breakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                            // 预备事务
-                            Player getPlayer = breakEvent.getPlayer(); // 获取破坏方块的玩家
-                            Damageable getPlayerDamageable = (Damageable) breakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                            maxDurability = getPlayer.getInventory().getItemInMainHand().getType().getMaxDurability();
-                            if (getPlayerDamageable != null && getPlayerDamageable.hasDamage()) {
+    public void mineralsCoal(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.COAL_ORE
+                            || blockBreakEvent.getBlock().getType() == Material.DEEPSLATE_COAL_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
                                 // 最大耐久检查
-                                damage = getPlayerDamageable.getDamage();
-                            }
-                            blockNumber = 0;
-                            expToGive = 0;
-                            if (maxDurability - damage > 0) {
-                                // 执行操作
-                                callbackCorruption(breakEvent.getBlock());
-                                // 执行完毕处理完成事务
-                                if (getPlayerDamageable != null && getPlayerDamageable.hasDamage()) {
-                                    // 最大耐久检查
-                                    if (maxDurability - damage - blockNumber <= 0) {
-                                        if (blockNumber == 0) {
-                                            breakEvent.setCancelled(true);
-                                        }
-                                        getPlayer.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                                        getPlayer.playSound(getPlayer.getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
-                                    } else {
-                                        getPlayerDamageable.setDamage(damage + blockNumber);
-                                        getPlayer.getInventory().getItemInMainHand().setItemMeta(getPlayerDamageable);
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
                                     }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
                                 }
-                                getPlayer.giveExp(expToGive);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsIron(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.IRON_ORE
+                            || blockBreakEvent.getBlock().getType() == Material.DEEPSLATE_IRON_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsLapis(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.LAPIS_ORE
+                            || blockBreakEvent.getBlock().getType() == Material.DEEPSLATE_LAPIS_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsCopper(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.COPPER_ORE
+                            || blockBreakEvent.getBlock().getType() == Material.DEEPSLATE_COPPER_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsGold(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.GOLD_ORE
+                            || blockBreakEvent.getBlock().getType() == Material.DEEPSLATE_GOLD_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsRedStone(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.REDSTONE_ORE
+                            || blockBreakEvent.getBlock().getType() == Material.DEEPSLATE_REDSTONE_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsDiamond(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.DIAMOND_ORE
+                            || blockBreakEvent.getBlock().getType() == Material.DEEPSLATE_DIAMOND_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsEmerald(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.EMERALD_ORE
+                            || blockBreakEvent.getBlock().getType() == Material.DEEPSLATE_EMERALD_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsNetherQuartz(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.NETHER_QUARTZ_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsNetherGold(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.NETHER_GOLD_ORE) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void mineralsAncient(BlockBreakEvent blockBreakEvent) {
+        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+            if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查物品
+                    if (blockBreakEvent.getBlock().getType() == Material.ANCIENT_DEBRIS) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDurability = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        ExpToDrop = blockBreakEvent.getExpToDrop();
+                        blockNumber = 0;
+                        // 检查剩余耐久
+                        if (maxDurability - damage > 0) {
+                            // 执行操作
+                            callbackCorruption(blockBreakEvent.getBlock());
+                            // 执行完毕处理完成事务
+                            if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                                // 最大耐久检查
+                                if (maxDurability - damage - blockNumber <= 0) {
+                                    if (blockNumber == 0) {
+                                        blockBreakEvent.setCancelled(true);
+                                    }
+                                    blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                    blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                                } else {
+                                    getPlayerItem.setDamage(damage + blockNumber);
+                                    blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                                    Location location = blockBreakEvent.getBlock().getLocation();
+                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                }
                             }
                         }
                     }
@@ -91,36 +542,11 @@ public class MineralsListener implements Listener {
     }
 
     private void repetitiveStatement(@NotNull Block getBlock) {
-        while (getBlock.getType() == Material.COAL_ORE || getBlock.getType() == Material.DEEPSLATE_COAL_ORE
-                || getBlock.getType() == Material.LAPIS_ORE || getBlock.getType() == Material.DEEPSLATE_LAPIS_ORE
-                || getBlock.getType() == Material.COPPER_ORE || getBlock.getType() == Material.DEEPSLATE_COPPER_ORE
-                || getBlock.getType() == Material.IRON_ORE || getBlock.getType() == Material.DEEPSLATE_IRON_ORE
-                || getBlock.getType() == Material.GOLD_ORE || getBlock.getType() == Material.DEEPSLATE_GOLD_ORE
-                || getBlock.getType() == Material.DIAMOND_ORE || getBlock.getType() == Material.DEEPSLATE_DIAMOND_ORE
-                || getBlock.getType() == Material.REDSTONE_ORE || getBlock.getType() == Material.DEEPSLATE_REDSTONE_ORE
-                || getBlock.getType() == Material.EMERALD_ORE || getBlock.getType() == Material.DEEPSLATE_EMERALD_ORE
-                || getBlock.getType() == Material.NETHER_GOLD_ORE
-                || getBlock.getType() == Material.NETHER_QUARTZ_ORE
-                || getBlock.getType() == Material.ANCIENT_DEBRIS) {
+        while (getBlock.getType() == thisBreak) {
             // 检查耐久是否允许继续执行
             if (maxDurability - damage - blockNumber > 0) {
                 // 检查允许的可获得经验内容
-                Random random = new Random();
-                if (getBlock.getType() == Material.COAL_ORE || getBlock.getType() == Material.DEEPSLATE_COAL_ORE) {
-                    expToGive += random.nextInt(2);
-                } else if (getBlock.getType() == Material.LAPIS_ORE || getBlock.getType() == Material.DEEPSLATE_LAPIS_ORE) {
-                    expToGive += random.nextInt(3) + 2;
-                } else if (getBlock.getType() == Material.REDSTONE_ORE || getBlock.getType() == Material.DEEPSLATE_REDSTONE_ORE) {
-                    expToGive += random.nextInt(4) + 1;
-                } else if (getBlock.getType() == Material.EMERALD_ORE || getBlock.getType() == Material.DEEPSLATE_EMERALD_ORE
-                        || getBlock.getType() == Material.DIAMOND_ORE || getBlock.getType() == Material.DEEPSLATE_DIAMOND_ORE) {
-                    expToGive += random.nextInt(5) + 3;
-                } else if (getBlock.getType() == Material.NETHER_GOLD_ORE) {
-                    expToGive += random.nextInt(2);
-                } else if (getBlock.getType() == Material.NETHER_QUARTZ_ORE) {
-                    expToGive += random.nextInt(5) + 2;
-                }
-                getBlock.breakNaturally();
+                getBlock.breakNaturally(playerMainHandTool);
                 blockNumber++;
                 callbackCorruption(getBlock);
             } else {

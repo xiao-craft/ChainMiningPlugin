@@ -19,7 +19,7 @@ public class PluginMenu implements CommandExecutor {
                 sender.sendMessage("§2连锁挖矿 §aChainMining");
                 sender.sendMessage("§1作者：§3锋楪技术§8[§9筱锋xiao_lfeng§8]");
                 sender.sendMessage("§6使用方法：§e/fycm help");
-                sender.sendMessage("§c当前版本：§4v1.1-SNAPSHOT");
+                sender.sendMessage("§c当前版本：§4v1.2-SNAPSHOT");
                 sender.sendMessage("§7§l§m=]========§2§l 连锁挖矿§a§lChainMining§7§l§m ========[=");
             } else {
                 if ("help".equals(args[0])) {

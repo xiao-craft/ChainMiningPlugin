@@ -31,35 +31,40 @@ public class CutTreeListener implements Listener {
     // 最大破坏能力
     private int damage;
     private int maxDamage;
+    // 获取玩家手中工具
+    private ItemStack playerMainHandTool;
 
     @EventHandler
     public void oakLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.OAK_LOG
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_OAK_LOG) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.OAK_LEAVES;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.OAK_LOG
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_OAK_LOG) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.OAK_LEAVES;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -72,29 +77,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.BIRCH_LOG
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_BIRCH_LOG) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.BIRCH_LEAVES;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.BIRCH_LOG
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_BIRCH_LOG) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.BIRCH_LEAVES;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -107,29 +115,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.JUNGLE_LOG
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_JUNGLE_LOG) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.JUNGLE_LEAVES;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.JUNGLE_LOG
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_JUNGLE_LOG) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.JUNGLE_LEAVES;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -142,29 +153,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.ACACIA_LOG
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_ACACIA_LOG) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.ACACIA_LEAVES;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.ACACIA_LOG
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_ACACIA_LOG) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.ACACIA_LEAVES;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -177,29 +191,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.DARK_OAK_LOG
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_DARK_OAK_LOG) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.DARK_OAK_LEAVES;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.DARK_OAK_LOG
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_DARK_OAK_LOG) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.DARK_OAK_LEAVES;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -212,29 +229,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.MANGROVE_LOG
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_MANGROVE_LOG) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.MANGROVE_LEAVES;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.MANGROVE_LOG
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_MANGROVE_LOG) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.MANGROVE_LEAVES;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -247,29 +267,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.CHERRY_LOG
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_CHERRY_LOG) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.CHERRY_LEAVES;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.CHERRY_LOG
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_CHERRY_LOG) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.CHERRY_LEAVES;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -282,29 +305,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.CRIMSON_STEM
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_CRIMSON_STEM) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.CRIMSON_FUNGUS;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.CRIMSON_STEM
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_CRIMSON_STEM) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.CRIMSON_FUNGUS;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -317,29 +343,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.WARPED_STEM
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_WARPED_STEM) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.WARPED_FUNGUS;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.WARPED_STEM
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_WARPED_STEM) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.WARPED_FUNGUS;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -352,29 +381,32 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.SPRUCE_LOG
-                        || blockBreakEvent.getBlock().getType() == Material.STRIPPED_SPRUCE_LOG) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisBreak = blockBreakEvent.getBlock().getType();
-                    thisLeaves = Material.BIRCH_LEAVES;
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(0, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.SPRUCE_LOG
+                            || blockBreakEvent.getBlock().getType() == Material.STRIPPED_SPRUCE_LOG) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        playerMainHandTool = blockBreakEvent.getPlayer().getInventory().getItemInMainHand();
+                        thisBreak = blockBreakEvent.getBlock().getType();
+                        thisLeaves = Material.BIRCH_LEAVES;
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(0, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -387,27 +419,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.OAK_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.OAK_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -420,27 +454,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.SPRUCE_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.SPRUCE_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -453,27 +489,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.BIRCH_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.BIRCH_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -486,27 +524,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.JUNGLE_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.JUNGLE_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -519,27 +559,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.ACACIA_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.ACACIA_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -552,27 +594,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.MANGROVE_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.MANGROVE_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -585,27 +629,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.AZALEA_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.AZALEA_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -618,27 +664,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.CHERRY_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.CHERRY_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -651,27 +699,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.FLOWERING_AZALEA_LEAVES) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.FLOWERING_AZALEA_LEAVES) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -684,27 +734,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.BAMBOO_BLOCK) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.BAMBOO_BLOCK) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -717,27 +769,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.CRIMSON_FUNGUS) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.CRIMSON_FUNGUS) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -750,27 +804,29 @@ public class CutTreeListener implements Listener {
         // 检查玩家是否开启
         if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-                // 检查能否掉落物品
-                if (blockBreakEvent.getBlock().getType() == Material.WARPED_FUNGUS) {
-                    // 初始化参数
-                    Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-                    thisLeaves = blockBreakEvent.getBlock().getType();
-                    breakLocation = blockBreakEvent.getBlock().getLocation();
-                    oakNumber = 0;
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
-                        damage = getPlayerItem.getDamage();
-                    }
-                    // 进行砍树
-                    anyWay(1, blockBreakEvent.getBlock());
-                    // 对物品造成破坏
-                    if (getPlayerItem != null && getPlayerItem.hasDamage()) {
-                        if (damage + oakNumber < maxDamage) {
-                            getPlayerItem.setDamage(damage + oakNumber);
-                            blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
-                        } else {
-                            blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-                            blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                if (blockBreakEvent.getPlayer().isSneaking()) {
+                    // 检查能否掉落物品
+                    if (blockBreakEvent.getBlock().getType() == Material.WARPED_FUNGUS) {
+                        // 初始化参数
+                        Damageable getPlayerItem = (Damageable) blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+                        thisLeaves = blockBreakEvent.getBlock().getType();
+                        breakLocation = blockBreakEvent.getBlock().getLocation();
+                        oakNumber = 0;
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            maxDamage = blockBreakEvent.getPlayer().getInventory().getItemInMainHand().getType().getMaxDurability();
+                            damage = getPlayerItem.getDamage();
+                        }
+                        // 进行砍树
+                        anyWay(1, blockBreakEvent.getBlock());
+                        // 对物品造成破坏
+                        if (getPlayerItem != null && getPlayerItem.hasDamage()) {
+                            if (damage + oakNumber < maxDamage) {
+                                getPlayerItem.setDamage(damage + oakNumber);
+                                blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
+                            } else {
+                                blockBreakEvent.getPlayer().getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                blockBreakEvent.getPlayer().playSound(blockBreakEvent.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
+                            }
                         }
                     }
                 }
@@ -790,7 +846,7 @@ public class CutTreeListener implements Listener {
                     relativeDistanceZ = -relativeDistanceZ;
                 }
                 if (relativeDistanceX <= 5 && relativeDistanceZ <= 5) {
-                    getBlock.breakNaturally();
+                    getBlock.breakNaturally(playerMainHandTool);
                     oakNumber++;
                     anyWay(0, getBlock);
                 } else {
@@ -811,7 +867,7 @@ public class CutTreeListener implements Listener {
                     relativeDistanceZ = -relativeDistanceZ;
                 }
                 if (relativeDistanceX <= 5 && relativeDistanceZ <= 5) {
-                    getBlock.breakNaturally();
+                    getBlock.breakNaturally(playerMainHandTool);
                     anyWay(0, getBlock);
                 } else {
                     break;
@@ -834,7 +890,7 @@ public class CutTreeListener implements Listener {
                     relativeDistanceZ = -relativeDistanceZ;
                 }
                 if (relativeDistanceX <= 3 && relativeDistanceZ <= 3) {
-                    getBlock.breakNaturally();
+                    getBlock.breakNaturally(playerMainHandTool);
                     oakNumber++;
                     anyWay(1, getBlock);
                 } else {
