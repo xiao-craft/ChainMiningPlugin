@@ -33,7 +33,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsCoal(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -66,8 +66,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -79,7 +81,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsIron(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -112,8 +114,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -125,7 +129,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsLapis(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -158,8 +162,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -171,7 +177,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsCopper(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -204,8 +210,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -217,7 +225,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsGold(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -250,8 +258,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -263,7 +273,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsRedStone(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -296,8 +306,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -309,7 +321,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsDiamond(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -342,8 +354,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -355,7 +369,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsEmerald(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -388,8 +402,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -401,7 +417,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsNetherQuartz(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -433,8 +449,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -446,7 +464,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsNetherGold(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -478,8 +496,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }
@@ -491,7 +511,7 @@ public class MineralsListener implements Listener {
 
     @EventHandler
     public void mineralsAncient(BlockBreakEvent blockBreakEvent) {
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("chainMining")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查物品
@@ -523,8 +543,10 @@ public class MineralsListener implements Listener {
                                     getPlayerItem.setDamage(damage + blockNumber);
                                     blockBreakEvent.getPlayer().getInventory().getItemInMainHand().setItemMeta(getPlayerItem);
                                     Location location = blockBreakEvent.getBlock().getLocation();
-                                    ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
-                                    experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    if (ExpToDrop > 0) {
+                                        ExperienceOrb experienceOrb = Objects.requireNonNull(location.getWorld()).spawn(location, ExperienceOrb.class);
+                                        experienceOrb.setExperience(ExpToDrop * blockNumber);
+                                    }
                                 }
                             }
                         }

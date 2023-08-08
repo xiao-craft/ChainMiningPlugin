@@ -37,7 +37,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void oakLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -75,7 +75,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void birchLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -113,7 +113,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void jungleLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -151,7 +151,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void acaciaLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -189,7 +189,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void darkOrkLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -227,7 +227,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void mangroveLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -265,7 +265,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void cherryLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -303,7 +303,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void crimsonStem(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -341,7 +341,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void warpedStem(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -379,7 +379,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void spruceLog(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -417,7 +417,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void oakLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -452,7 +452,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void spruceLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -487,7 +487,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void birchLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -522,7 +522,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void jungleLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -557,7 +557,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void acaciaLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -592,7 +592,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void mangroveLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -627,7 +627,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void azaleaLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -662,7 +662,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void cherryLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -697,7 +697,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void floweringAzaleaLeaves(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -732,7 +732,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void bambooBlock(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -767,7 +767,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void crimsonFungus(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品
@@ -802,7 +802,7 @@ public class CutTreeListener implements Listener {
     @EventHandler
     public void warpedFungus(@NotNull BlockBreakEvent blockBreakEvent) {
         // 检查玩家是否开启
-        if (ChainMining.playerList.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
+        if (ChainMining.playerData.get(blockBreakEvent.getPlayer().getName()).get("tree")) {
             if (blockBreakEvent.getPlayer().getGameMode() == GameMode.SURVIVAL) {
                 if (blockBreakEvent.getPlayer().isSneaking()) {
                     // 检查能否掉落物品

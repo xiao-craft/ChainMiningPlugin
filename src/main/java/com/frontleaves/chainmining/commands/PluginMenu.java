@@ -1,15 +1,17 @@
 package com.frontleaves.chainmining.commands;
 
 import com.frontleaves.chainmining.ChainMining;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 锋楪技术（深圳）有限公司
  */
-public class PluginMenu implements CommandExecutor {
+public class PluginMenu implements CommandExecutor, TabExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -19,7 +21,7 @@ public class PluginMenu implements CommandExecutor {
                 sender.sendMessage("§2连锁挖矿 §aChainMining");
                 sender.sendMessage("§1作者：§3锋楪技术§8[§9筱锋xiao_lfeng§8]");
                 sender.sendMessage("§6使用方法：§e/fycm help");
-                sender.sendMessage("§c当前版本：§4v1.2-SNAPSHOT");
+                sender.sendMessage("§c当前版本：§4" + ChainMining.VERSION);
                 sender.sendMessage("§7§l§m=]========§2§l 连锁挖矿§a§lChainMining§7§l§m ========[=");
             } else {
                 if ("help".equals(args[0])) {
@@ -74,7 +76,7 @@ public class PluginMenu implements CommandExecutor {
                                         sender.sendMessage("§7§l§m=]========§2§l 连锁挖矿§a§lChainMining§7§l§m ========[=");
                                         sender.sendMessage("§31 §8/ §32");
                                     } else {
-                                        sender.sendMessage(ChainMining.prefix + "§c 超出页面");
+                                        sender.sendMessage(ChainMining.PREFIX + "§c 超出页面");
                                     }
                                 }
                                 break;
@@ -84,22 +86,33 @@ public class PluginMenu implements CommandExecutor {
                                 sender.sendMessage("§7§l§m=]========§2§l 连锁挖矿§a§lChainMining§7§l§m ========[=");
                                 break;
                             default:
-                                sender.sendMessage(ChainMining.prefix + "§c 参数错误，输入 /fycm 查看指令帮助");
+                                sender.sendMessage(ChainMining.PREFIX + "§c 参数错误，输入 /fycm 查看指令帮助");
                                 break;
                         }
                     }
                 } else if ("status".equals(args[0])) {
                     sender.sendMessage("§7§l§m=]========§2§l 连锁挖矿§a§lChainMining§7§l§m ========[=");
-                    sender.sendMessage("§6连锁挖矿：§3" + ChainMining.playerList.get(sender.getName()).get("chainMining"));
-                    sender.sendMessage("§6快速砍树：§3" + ChainMining.playerList.get(sender.getName()).get("tree"));
-                    sender.sendMessage("§6全局操作：§3" + ChainMining.playerList.get(sender.getName()).get("auto"));
-                    sender.sendMessage("§6开路模式：§3" + ChainMining.playerList.get(sender.getName()).get("road"));
+                    sender.sendMessage("§6连锁挖矿：§3" + ChainMining.playerData.get(sender.getName()).get("chainMining"));
+                    sender.sendMessage("§6快速砍树：§3" + ChainMining.playerData.get(sender.getName()).get("tree"));
+                    sender.sendMessage("§6全局操作：§3" + ChainMining.playerData.get(sender.getName()).get("auto"));
+                    sender.sendMessage("§6开路模式：§3" + ChainMining.playerData.get(sender.getName()).get("road"));
                     sender.sendMessage("§7§l§m=]========§2§l 连锁挖矿§a§lChainMining§7§l§m ========[=");
                 } else {
-                    sender.sendMessage(ChainMining.prefix + "§c 输入 /fycm 查看指令帮助");
+                    sender.sendMessage(ChainMining.PREFIX + "§c 输入 /fycm 查看指令帮助");
                 }
             }
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        List<String> tab = new ArrayList<>();
+        if (args.length == 1) {
+            tab.add("help");
+            tab.add("status");
+        }
+        return tab;
     }
 }

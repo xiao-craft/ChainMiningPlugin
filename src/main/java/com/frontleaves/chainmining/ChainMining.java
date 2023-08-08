@@ -2,6 +2,7 @@ package com.frontleaves.chainmining;
 
 import com.frontleaves.chainmining.commands.ChangeToUse;
 import com.frontleaves.chainmining.commands.PluginMenu;
+import com.frontleaves.chainmining.listeners.AutoListener;
 import com.frontleaves.chainmining.listeners.CutTreeListener;
 import com.frontleaves.chainmining.listeners.MineralsListener;
 import com.frontleaves.chainmining.listeners.PlayerJoinServerListener;
@@ -15,9 +16,11 @@ import java.util.Objects;
  */
 public final class ChainMining extends JavaPlugin {
 
-    public static String prefix = "§8[§bFYCM§8]";
+    public static final String PREFIX = "§8[§bFYCM§8]§r";
+    public static final String VERSION = "v1.3-SNAPSHOT";
 
-    public static HashMap<String,HashMap<String, Boolean>> playerList = new HashMap<>();
+    public static HashMap<String, HashMap<String, HashMap<String, Integer>>> playerList = new HashMap<>();
+    public static HashMap<String, HashMap<String, Boolean>> playerData = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -28,6 +31,7 @@ public final class ChainMining extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinServerListener(), this);
         getServer().getPluginManager().registerEvents(new MineralsListener(), this);
         getServer().getPluginManager().registerEvents(new CutTreeListener(), this);
+        getServer().getPluginManager().registerEvents(new AutoListener(), this);
         // Plugin startup logic
         getLogger().info("插件启动成功");
     }
